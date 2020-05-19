@@ -4,22 +4,36 @@ from tensorflow.examples.tutorials.mnist import input_data
 
 
 def weight_variable(shape):
+    '''initialize a variable following truncated normal distribution with given shape'''
     initial = tf.truncated_normal(shape, stddev=0.1)
     return tf.Variable(initial)
 
 
 def bias_variable(shape):
+    '''initialize a variable to be 0.01 with given shape'''
     initial = tf.constant(0.1, shape=shape)
     return tf.Variable(initial)
 
 
 def conv2d(x, W):
+    '''
+    tf.nn.conv2d: calculates convolutions in batches and uses a slightly different format.
+    
+    "padding": Either the string "SAME" or "VALID" indicating the type of padding algorithm to use, or a list indicating the explicit paddings at the start and end of each dimension.
+    'SAME' makes sure that our output has the same size as input and uses appropriate padding.
+    
+    "stride": An int or list of ints that has length 1, 2 or 4. The stride of the sliding window for each dimension of input. It determines how much the window shifts by in each of the dimensions. 
+    '''
     return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
 
 
 def max_pool_2x2(x):
+    '''
+    "tf.nn.max_pool": Performs the max pooling on the input.
+    '''
     return tf.nn.max_pool(x, ksize=[1, 2, 2, 1],
                           strides=[1, 2, 2, 1], padding='SAME')
+
 
 
 if __name__ == '__main__':
@@ -41,7 +55,7 @@ if __name__ == '__main__':
     # 第二层卷积层
     W_conv2 = weight_variable([5, 5, 32, 64])
     b_conv2 = bias_variable([64])
-    h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
+    h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2) # performs convolutional computation, ReLU is activation function
     h_pool2 = max_pool_2x2(h_conv2)
 
     # 全连接层，输出为1024维的向量
